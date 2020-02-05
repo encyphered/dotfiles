@@ -32,6 +32,7 @@ elif [ ! -z "$P10K" ]; then
   fi
   if [ -d $HOME/.oh-my-zsh/lib ]; then
     source $HOME/.oh-my-zsh/lib/completion.zsh
+    source $HOME/.oh-my-zsh/lib/key-bindings.zsh
   fi
   if [ -d $HOME/.oh-my-zsh/plugins ]; then
     source $HOME/.oh-my-zsh/plugins/git/git.plugin.zsh
@@ -39,9 +40,6 @@ elif [ ! -z "$P10K" ]; then
     source $HOME/.oh-my-zsh/plugins/docker/_docker
     source $HOME/.oh-my-zsh/plugins/common-aliases/common-aliases.plugin.zsh
   fi
-
-  bindkey "^[[H"   beginning-of-line
-  bindkey "^[[F"   end-of-line
 else
   :
 fi
