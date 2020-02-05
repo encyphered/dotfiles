@@ -40,6 +40,8 @@ elif [ ! -z "$P10K" ]; then
     source $HOME/.oh-my-zsh/plugins/docker/_docker
     source $HOME/.oh-my-zsh/plugins/common-aliases/common-aliases.plugin.zsh
   fi
+
+  setopt interactivecomments
 else
   :
 fi
