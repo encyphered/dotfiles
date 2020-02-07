@@ -102,10 +102,15 @@ alias grbi8='git rebase -i HEAD~8'
 alias grbi9='git rebase -i HEAD~9'
 alias glog='git log --pretty="%C(yellow)%h %C(Green)%cr%C(dim white), %C(no-dim cyan)%an%C(dim white): %C(reset)%s%C(auto)%d" --graph'
 alias gloga='glog --all'
-alias ga='git status -s | grep -v "^[DMA] " | fzf -m | awk "{print \$2}" | xargs -o git add'
 alias grh='git status --short | grep "^[MARCD]" | sed -e "s/^[MARCD] *//g" | fzf --print0 -m | xargs -0 git reset HEAD'
 alias gs='git log --pretty="%h %cr, %an: %s" --max-count=20 | fzf --no-sort | cut -f1 -d" " | xargs git show'
-alias gscc='git log --pretty="%h %cr, %an: %s" --abbrev=7 --max-count=20 | fzf --no-sort | cut -f1 -d" " | xargs echo -n | pbcopy'
+unalias ga
+function ga() {
+  [ $# -eq 0 ] && git status -s | grep -v "^[DMA] " | fzf -m | awk "{print \$2}" | xargs -o git add || git add $@
+}
+function gscc() {
+  git log --pretty="%h %cr, %an: %s" --abbrev=7 --max-count=20 $1 | fzf --no-sort | cut -f1 -d" " | xargs echo -n | pbcopy
+}
 
 alias hl='highlight --base16 -O truecolor -s solarized-dark -S'
 
