@@ -25,20 +25,21 @@ elif [ ! -z "$P10K" ]; then
 
   autoload -U compinit && compinit
 
-  if [ -d "$HOME/.oh-my-zsh" ]; then
+  OMZ="$HOME/.oh-my-zsh"
+  if [ -d "$OMZ" ]; then
     if [[ -z "$ZSH_CACHE_DIR" ]]; then
-      export ZSH_CACHE_DIR="$HOME/.oh-my-zsh/cache"
+      export ZSH_CACHE_DIR="$OMZ/cache"
     fi
   fi
-  if [ -d $HOME/.oh-my-zsh/lib ]; then
-    source $HOME/.oh-my-zsh/lib/completion.zsh
-    source $HOME/.oh-my-zsh/lib/key-bindings.zsh
+  if [ -d "$OMZ/lib" ]; then
+    source $OMZ/lib/completion.zsh
+    source $OMZ/lib/key-bindings.zsh
   fi
-  if [ -d $HOME/.oh-my-zsh/plugins ]; then
-    source $HOME/.oh-my-zsh/plugins/git/git.plugin.zsh
-    source $HOME/.oh-my-zsh/plugins/kubectl/kubectl.plugin.zsh
-    source $HOME/.oh-my-zsh/plugins/docker/_docker
-    source $HOME/.oh-my-zsh/plugins/common-aliases/common-aliases.plugin.zsh
+  if [ -d "$OMZ/plugins" ]; then
+    source $OMZ/plugins/git/git.plugin.zsh
+    source $OMZ/plugins/kubectl/kubectl.plugin.zsh
+    source $OMZ/plugins/common-aliases/common-aliases.plugin.zsh
+    source $OMZ/plugins/gradle/gradle.plugin.zsh
   fi
 
   setopt interactivecomments
