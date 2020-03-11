@@ -107,7 +107,11 @@ alias grh='git status --short | grep "^[MARCD]" | sed -e "s/^[MARCD] *//g" | fzf
 alias gs='git log --pretty="%h %cr, %an: %s" --max-count=20 | fzf --no-sort | cut -f1 -d" " | xargs git show'
 unalias ga
 function ga() {
-  [ $# -eq 0 ] && git status -s | grep -v "^[DMA] " | fzf -m | awk "{print \$2}" | xargs -o git add || git add $@
+  if [ $# -eq 0 ] || [ "$1" = "-p" ]; then
+    git status -s | grep -v "^[DMA] " | fzf -m | awk "{print \$2}" | xargs -o git add $@
+  else
+    git add $@
+  fi
 }
 function gscc() {
   git log --pretty="%h %cr, %an: %s" --abbrev=7 --max-count=20 $1 | fzf --no-sort | cut -f1 -d" " | xargs echo -n | pbcopy
