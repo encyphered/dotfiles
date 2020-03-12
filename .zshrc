@@ -78,8 +78,23 @@ if [ -x /usr/local/bin/kubectl ]; then
 
   unalias keti 2> /dev/null
   function keti() {
-    kubectl exec $1 -itc $(kubectl get pod $1 -o jsonpath='{.spec.containers[*].name}' | tr ' ' '\n' | fzf --no-sort -1) -- $(shift 2>&1 > /dev/null && echo $@)
+    local POD CONTAINER CMD
+    if [ $# -gt 1 ]; then
+      POD=$(kubectl get pod | grep $1 | grep Running)
+      if [ $(echo "$POD" | wc -l) -eq 1 ]; then
+        POD=$(echo "$POD" | awk '{print $1}')
+      else
+        POD=$(kubectl get pod | grep $1 | grep Running | fzf --tac | awk '{print $1}' || exit 1)
+      fi
+      shift
+    elif [ $# -eq 1 ]; then
+      POD=$(kubectl get pod | grep Running | fzf --tac | awk '{print $1}' || exit 1)
+    fi
+    [ ! -z "$POD" ] && CONTAINER=$(kubectl get pod $POD -o json | jq -r '.spec.containers[] | "\(.name) \(.image)"' | awk '{printf("%-10s %s\n", $1, $2)}' | fzf -1 | awk '{print $1}')
+    [ ! -z "$CONTAINER" ] && CMD=$@ && [ $# -eq 0 ] && echo -n "Enter a command to run: " && read CMD || true && CMD=($(echo $CMD))
+    [ ! -z "$CMD" ] && echo "Running [${CMD[@]}] on ${CONTAINER} in ${POD}" && kubectl exec $POD -itc $CONTAINER -- "${CMD[@]}"
   }
+  alias ke='kubectl exec'
 fi
 
 export LSCOLORS=exfxcxdxbxegedabagacad
