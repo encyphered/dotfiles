@@ -9,6 +9,7 @@ Plug 'godlygeek/tabular'
 Plug 'plasticboy/vim-markdown'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
+Plug 'APZelos/blamer.nvim'
 call plug#end()
 
 let g:python_host_prog = '/usr/local/bin/python'
@@ -83,3 +84,6 @@ autocmd  FileType fzf set laststatus=0 noshowmode noruler
 let g:vim_markdown_folding_disabled = 1
 
 autocmd filetype crontab setlocal nobackup nowritebackup
+
+let g:blamer_enabled = 1
+let g:blamer_delay = 500
