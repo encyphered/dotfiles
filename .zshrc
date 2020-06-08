@@ -95,6 +95,32 @@ if [ -x /usr/local/bin/kubectl ]; then
     [ ! -z "$CMD" ] && echo "Running [${CMD[@]}] on ${CONTAINER} in ${POD}" && kubectl exec $POD -itc $CONTAINER -- "${CMD[@]}"
   }
   alias ke='kubectl exec'
+
+  unalias kgp 2> /dev/null
+  function kgp() {
+    local FMT PATTERN PODS
+    while true; do
+      [ $# -eq 0 ] && break
+      case "$1" in
+        -o ) shift; FMT=$1;     shift ;;
+        *  )        PATTERN=$1; shift ;;
+      esac
+    done
+    [ -z "$PATTERN" ] && PATTERN="."
+    if [ "$FMT" = "yaml" ] || [ "$FMT" = "json" ]; then
+      PODS=$(kubectl get pod --no-headers | grep --color=none $PATTERN)
+      if [ $(echo "$PODS" | wc -l) -lt 1 ]; then
+        # NOOP
+      elif [ $(echo "$PODS" | wc -l) -eq 1 ]; then
+        kubectl get pod $(echo "$PODS" | awk '{print $1}') -o $FMT
+      else
+        kubectl get pod $(echo "$PODS" | fzf --tac | awk '{print $1}') -o $FMT
+      fi
+    else
+      kubectl get pod --no-headers | grep --color=none $PATTERN
+    fi
+  }
+  alias kgpw='kubectl get pod --watch'
 fi
 
 export LSCOLORS=exfxcxdxbxegedabagacad
