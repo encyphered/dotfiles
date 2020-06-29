@@ -61,11 +61,6 @@ source /usr/local/share/zsh-history-substring-search/zsh-history-substring-searc
 if [ -x /usr/local/bin/kubectl ]; then
 	declare -f compdef > /dev/null && source <(kubectl completion zsh)
 
-	unalias k 2> /dev/null
-  function k() {
-    NS=$1 && shift 2> /dev/null && kubectl --namespace $NS $@
-  }
-
   declare -f kubeon > /dev/null && {
     KUBE_PS1_SYMBOL_ENABLE=false
     KUBE_PS1_PREFIX='['
