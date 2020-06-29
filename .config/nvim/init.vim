@@ -91,3 +91,19 @@ autocmd filetype crontab setlocal nobackup nowritebackup
 
 let g:blamer_enabled = 1
 let g:blamer_delay = 500
+
+function TabTerm()
+  :tabnew
+  :terminal
+endfunction
+
+" terminal
+nnoremap <leader>t :exec TabTerm()<CR>
+
+augroup TerminalStuff
+  autocmd TermOpen * setlocal nonumber norelativenumber
+  autocmd TermOpen * :startinsert
+  autocmd TermClose * bd!
+augroup END
+let g:terminal_color_8='#3e5358'
+tnoremap <leader><ESC> <C-\><C-n>
