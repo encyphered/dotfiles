@@ -180,3 +180,14 @@ function nvminit() {
 [ -f $HOME/.secure-env.sh ] && source $HOME/.secure-env.sh 2> /dev/null
 
 [ -f /Users/cypher/Library/Preferences/org.dystroy.broot/launcher/bash/br ] && source /Users/cypher/Library/Preferences/org.dystroy.broot/launcher/bash/br
+
+_fzf_complete_docker() {
+  local cmd=$3
+  if [ "${cmd}" == "rmi" ] || [ "${cmd}" == "push" ]; then
+    docker images | fzf --no-sort --layout=reverse --header-lines=1 --inline-info --multi | awk '{ if($2=="<none>") printf("%s ", $3); else printf("%s:%s ", $1, $2) }' | sed -e 's/ $//g'
+  elif [ "${cmd}" == "pull" ] || [ "${cmd}" == "tag" ]; then
+    docker images | fzf --no-sort --layout=reverse --header-lines=1 --inline-info | awk '{ printf("%s:%s", $1, $2) }'
+  fi
+}
+
+complete -F _fzf_complete_docker -o default -o bashdefault -S '' docker
