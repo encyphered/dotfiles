@@ -59,7 +59,7 @@ source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
 
 if [ -x /usr/local/bin/kubectl ]; then
-	declare -f compdef > /dev/null && source <(kubectl completion zsh)
+  declare -f compdef > /dev/null && source <(kubectl completion zsh)
 
   declare -f kubeon > /dev/null && {
     KUBE_PS1_SYMBOL_ENABLE=false
@@ -71,50 +71,59 @@ if [ -x /usr/local/bin/kubectl ]; then
     kubeon -g
   }
 
-  unalias keti 2> /dev/null
-  function keti() {
-    local POD CONTAINER CMD
-    if [ $# -gt 1 ]; then
-      POD=$(kubectl get pod | grep $1 | grep Running)
-      if [ $(echo "$POD" | wc -l) -eq 1 ]; then
-        POD=$(echo "$POD" | awk '{print $1}')
-      else
-        POD=$(kubectl get pod | grep $1 | grep Running | fzf --tac | awk '{print $1}' || exit 1)
-      fi
+  function kfzf() {
+    local resource_type pattern args opts extra_args obj
+  
+    if [[ "${1}" == "get" || "${1}" == "delete" || "${1}" == "describe" ]]; then
+      args="${1} ${2}"
+      resource_type=$2
+      shift; shift
+    else
+      args="${1}"
+      resource_type="pod"
       shift
-    elif [ $# -eq 1 ]; then
-      POD=$(kubectl get pod | grep Running | fzf --tac | awk '{print $1}' || exit 1)
     fi
-    [ ! -z "$POD" ] && CONTAINER=$(kubectl get pod $POD -o json | jq -r '.spec.containers[] | "\(.name) \(.image)"' | awk '{printf("%-10s %s\n", $1, $2)}' | fzf -1 | awk '{print $1}')
-    [ ! -z "$CONTAINER" ] && CMD=$@ && [ $# -eq 0 ] && echo -n "Enter a command to run: " && read CMD || true && CMD=($(echo $CMD))
-    [ ! -z "$CMD" ] && echo "Running [${CMD[@]}] on ${CONTAINER} in ${POD}" && kubectl exec $POD -itc $CONTAINER -- "${CMD[@]}"
-  }
-  alias ke='kubectl exec'
-
-  unalias kgp 2> /dev/null
-  function kgp() {
-    local FMT PATTERN PODS
+  
     while true; do
-      [ $# -eq 0 ] && break
+      [ $# -eq 0 ] && break || true
+      
       case "$1" in
-        -o ) shift; FMT=$1;     shift ;;
-        *  )        PATTERN=$1; shift ;;
+        --)
+          break ;;
+        -*[co])
+          opts="${opts} $1 $2"; shift; shift ;;
+        -*)
+          opts="${opts} $1"; shift ;;
+        *)
+          [ -z "${pattern}" ] && pattern=$1 || break; shift ;;
       esac
     done
-    [ -z "$PATTERN" ] && PATTERN="."
-    if [ "$FMT" = "yaml" ] || [ "$FMT" = "json" ]; then
-      PODS=$(kubectl get pod --no-headers | grep --color=none $PATTERN)
-      if [ $(echo "$PODS" | wc -l) -lt 1 ]; then
-        # NOOP
-      elif [ $(echo "$PODS" | wc -l) -eq 1 ]; then
-        kubectl get pod $(echo "$PODS" | awk '{print $1}') -o $FMT
-      else
-        kubectl get pod $(echo "$PODS" | fzf --tac | awk '{print $1}') -o $FMT
-      fi
+
+    args=($(echo $args))
+    opts=($(echo $opts))
+    extra_args=($(echo $@))
+
+    if [ -z "${pattern}" ]; then
+      obj=$(kubectl get $resource_type --no-headers | fzf --tac --no-sort | awk '{print $1}' || return 1)
     else
-      kubectl get pod --no-headers | grep --color=none $PATTERN
+      obj=$(kubectl get $resource_type --no-headers | grep $pattern)
+      if [ $(echo "$obj" | wc -l) -eq 1 ]; then
+        obj=$(echo "$obj" | awk '{print $1}')
+      else
+        obj=$(echo "$obj" | fzf --tac --no-sort | awk '{print $1}' || return 1)
+      fi
     fi
+
+    [ -z "${obj}" ] && { return 0; }
+
+    echo "+ kubectl ${args} ${obj} ${opts} ${extra_args}" > /dev/stderr
+    kubectl $args $obj $opts $extra_args
   }
+  alias kf='kfzf'
+
+  alias keti='kfzf exec -it'
+  alias ke='kfzf exec'
+  alias kgp='kfzf get pod'
   alias kgpw='kubectl get pod --watch'
 fi
 
