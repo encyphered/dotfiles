@@ -34,6 +34,7 @@ elif [ ! -z "$P10K" ]; then
   if [ -d "$OMZ/lib" ]; then
     source $OMZ/lib/completion.zsh
     source $OMZ/lib/key-bindings.zsh
+    source $OMZ/lib/history.zsh
   fi
   if [ -d "$OMZ/plugins" ]; then
     source $OMZ/plugins/git/git.plugin.zsh
