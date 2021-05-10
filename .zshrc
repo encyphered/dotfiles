@@ -137,12 +137,19 @@ if [ -x /usr/local/bin/kubectl ]; then
     echo "+ kubectl ${args} ${obj} ${opts} ${extra_args}" > /dev/stderr
     kubectl $args $obj $opts $extra_args
   }
-  alias kf='kfzf'
+  alias kz='kfzf'
+  alias kzlf='kz logs -fc app'
+  alias kzgp='kz get pod'
+  alias kzgpc="kubectl get pod --no-headers|fzf|awk '{print \$1}'|xargs echo -n |pbcopy"
 
   alias keti='kfzf exec -it'
   alias ke='kfzf exec'
-  alias kgp='kfzf get pod'
+  alias kgp='kubectl get pod'
   alias kgpw='kubectl get pod --watch'
+  function kzaf() {
+    /bin/ls | fzf | xargs kubectl apply -f
+  }
+
 fi
 
 export LSCOLORS=exfxcxdxbxegedabagacad
