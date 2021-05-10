@@ -73,12 +73,17 @@ if [ -x /usr/local/bin/kubectl ]; then
   }
 
   function kfzf() {
-    local resource_type pattern args opts extra_args obj
+    local namespace resource_type pattern args opts extra_args obj
   
-    if [[ "${1}" == "get" || "${1}" == "delete" || "${1}" == "describe" ]]; then
+    if [[ "${1}" == "get" || "${1}" == "delete" || "${1}" == "describe" || "${1}" == "edit" ]]; then
       args="${1} ${2}"
       resource_type=$2
       shift; shift
+    elif [[ "${1}" == "rollout" && "${2}" == "restart" ]]; then
+      args="${1} ${2}"
+      resource_type=$(echo "${3}"|awk -F/ '{print $1}')
+      pattern=$(echo "${3}"|awk -F/ '{print $2}')
+      shift; shift; shift
     else
       args="${1}"
       resource_type="pod"
@@ -92,22 +97,30 @@ if [ -x /usr/local/bin/kubectl ]; then
         --)
           break ;;
         -*[co])
-          opts="${opts} $1 $2"; shift; shift ;;
+          opts="${opts} $1 $2"; shift ;;
+        -*n)
+          opts="${opts} $1 $2"; namespace=$2; shift ;;
+        --*)
+          opts="${opts} $1 $2"; shift ;;
         -*)
-          opts="${opts} $1"; shift ;;
+          opts="${opts} $1" ;;
         *)
-          [ -z "${pattern}" ] && pattern=$1 || break; shift ;;
+          [ -z "${pattern}" ] && pattern=$1 || break ;;
       esac
+
+      shift
     done
 
     args=($(echo $args))
     opts=($(echo $opts))
     extra_args=($(echo $@))
 
+    ns_args=($([ -z "${namespace}" ] && echo "" || echo "-n ${namespace}"))
+
     if [ -z "${pattern}" ]; then
-      obj=$(kubectl get $resource_type --no-headers | fzf --tac --no-sort | awk '{print $1}' || return 1)
+      obj=$(kubectl get $resource_type $ns_args --no-headers | fzf --tac --no-sort | awk '{print $1}' || return 1)
     else
-      obj=$(kubectl get $resource_type --no-headers | grep $pattern)
+      obj=$(kubectl get $resource_type $ns_args --no-headers | grep $pattern)
       if [ $(echo "$obj" | wc -l) -eq 1 ]; then
         obj=$(echo "$obj" | awk '{print $1}')
       else
@@ -115,7 +128,11 @@ if [ -x /usr/local/bin/kubectl ]; then
       fi
     fi
 
-    [ -z "${obj}" ] && { return 0; }
+    [ -z "${obj}" ] && { return 1; }
+
+    if [[ "${args}" =~ "^rollout " ]]; then
+      obj="${resource_type}/${obj}"
+    fi
 
     echo "+ kubectl ${args} ${obj} ${opts} ${extra_args}" > /dev/stderr
     kubectl $args $obj $opts $extra_args
