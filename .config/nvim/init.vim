@@ -11,6 +11,7 @@ Plug 'plasticboy/vim-markdown'
 Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'APZelos/blamer.nvim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 call plug#end()
 
 let g:python_host_prog = '/usr/local/bin/python'
