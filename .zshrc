@@ -55,9 +55,9 @@ bindkey "^[^[[C" forward-word
 
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
-source /usr/local/share/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/local/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /usr/local/share/zsh-history-substring-search/zsh-history-substring-search.zsh
+source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
+source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
 
 if [ -x /usr/local/bin/kubectl ]; then
   declare -f compdef > /dev/null && source <(kubectl completion zsh)
