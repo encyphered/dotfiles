@@ -229,4 +229,4 @@ complete -F _fzf_complete_docker -o default -o bashdefault -S '' docker
 export GOPATH=$HOME/go
 export PATH="${GOPATH}/bin:$PATH"
 
-[ -d "${HOME}/.jenv" ] && eval "$(jenv init -)"
+[ -d "${HOME}/.jenv" ] && export PATH="$HOME/.jenv/bin:$PATH" && eval "$(jenv init -)"
