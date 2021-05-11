@@ -77,12 +77,15 @@ set updatetime=100
 set signcolumn=yes
 
 " fzf
-nnoremap <C-t> :FZF<CR>
+nnoremap <C-p> :FZF<CR>
 nnoremap <silent> <leader><space> :Files<CR>
 nnoremap <silent> <leader>? :History<CR>
 autocmd! FileType fzf
 autocmd  FileType fzf set laststatus=0 noshowmode noruler
   \| autocmd BufLeave <buffer> set laststatus=2 showmode ruler
+
+nnoremap <C-h> :bprevious<CR>
+nnoremap <C-l> :bnext<CR>
 
 " vim-markdown
 let g:vim_markdown_folding_disabled = 1
