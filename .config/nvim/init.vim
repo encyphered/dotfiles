@@ -1,5 +1,5 @@
 call plug#begin('~/.vim/plugged')
-Plug 'iCyMind/NeoSolarized' 
+Plug 'overcache/NeoSolarized'
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
