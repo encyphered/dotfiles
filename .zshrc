@@ -6,7 +6,7 @@ if [ ! -z "$ZSH" ]; then
   DISABLE_UNTRACKED_FILES_DIRTY="true"
   HIST_STAMPS="yyyy-mm-dd"
   ZSH_THEME="robbyrussell"
-  
+
   plugins=(
     git
     kubectl
@@ -14,7 +14,7 @@ if [ ! -z "$ZSH" ]; then
     fasd
     kube-ps1
   )
-  
+
   source $ZSH/oh-my-zsh.sh
 elif [ ! -z "$P10K" ]; then
   source $P10K/powerlevel10k.zsh-theme
