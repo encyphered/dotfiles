@@ -205,7 +205,6 @@ fi
 
 export BYOBU_PYTHON=python3
 alias screen='byobu'
-alias remotes="cat ~/.ssh/config|grep ^Host|grep -v '*'|sed -e 's/^Host //g'"
 
 export LANG=en_US.UTF-8
 
