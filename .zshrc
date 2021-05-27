@@ -229,6 +229,10 @@ _fzf_complete_docker() {
 
 complete -F _fzf_complete_docker -o default -o bashdefault -S '' docker
 
+awsctx() {
+  export AWS_PROFILE=$(cat ~/.aws/config|grep '^\[profile'|awk '{print $2}'|sed -e 's/]//g'|fzf)
+}
+
 export GOPATH=$HOME/go
 export PATH="${GOPATH}/bin:$PATH"
 
