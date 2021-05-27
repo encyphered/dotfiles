@@ -233,3 +233,4 @@ export GOPATH=$HOME/go
 export PATH="${GOPATH}/bin:$PATH"
 
 [ -d "${HOME}/.jenv" ] && export PATH="$HOME/.jenv/bin:$PATH" && eval "$(jenv init -)"
+[ -d "${HOME}/bin" ] && export PATH="$HOME/bin:$PATH"
