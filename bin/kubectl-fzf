@@ -1,0 +1,76 @@
+#!/bin/bash
+cmd=$1
+if [[ "${cmd}" == "get" || "${cmd}" == "delete" || "${cmd}" == "describe" || "${cmd}" == "edit" ]]; then
+  args="${1} ${2}"
+  resource_type=$2
+  shift; shift
+elif [[ "${cmd}" == "rollout" ]]; then
+  args="${1} ${2}"
+  shift; shift
+else
+  args="${1}"
+  resource_type="pod"
+  shift
+fi
+
+while true; do
+  [ $# -eq 0 ] && break || true
+
+  case "$1" in
+    --)
+      break ;;
+    -*[co])
+      opts="${opts} $1 $2"; shift ;;
+    --namespace)
+      opts="${opts} $1 $2"; ns=$2; shift ;;
+    -*n)
+      opts="${opts} $1 $2"; ns=$2; shift ;;
+    --*)
+      opts="${opts} $1 $2"; shift ;;
+    -*)
+      opts="${opts} $1" ;;
+    *)
+      if [ "$cmd" == "rollout" ]; then
+        if [[ "${1}" == *"/"* ]]; then
+          resource_type=$(echo "${1}"|awk -F/ '{print $1}')
+          pattern=$(echo "${1}"|awk -F/ '{print $2}')
+        else
+          resource_type=$1
+          pattern=$2
+          shift
+        fi
+      elif [ "$cmd" == "port-forward" ]; then
+        resource_type=$(echo "${1}"|awk -F/ '{print $1}')
+        pattern=$(echo "${1}"|awk -F/ '{print $2}')
+      else
+        pattern=$1
+      fi
+      shift
+      break ;;
+  esac
+
+  shift
+done
+
+extra_args=$@
+[ -z "${ns}" ] && ns_args="" || ns_args="--namespace ${ns}"
+
+if [ -z "${pattern}" ]; then
+  obj=$(kubectl get $resource_type $ns_args --no-headers | fzf --tac --no-sort | awk '{print $1}' || return 1)
+else
+  obj=$(kubectl get $resource_type $ns_args --no-headers | grep $pattern)
+  if [ $(echo "$obj" | wc -l) -eq 1 ]; then
+    obj=$(echo "$obj" | awk '{print $1}')
+  else
+    obj=$(echo "$obj" | fzf --tac --no-sort | awk '{print $1}' || return 1)
+  fi
+fi
+
+[ -z "${obj}" ] && { echo "No object found or selected." > /dev/stderr; exit 1; }
+
+if [[ "${cmd}" == "rollout" || "${cmd}" == "port-forward" ]]; then
+  obj="${resource_type}/${obj}"
+fi
+
+echo "+ kubectl ${args} ${obj} ${opts} ${extra_args}" | sed -e "s/  / /g" > /dev/stderr
+kubectl $args $obj $opts $extra_args

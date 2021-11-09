@@ -1,0 +1,19 @@
+[checkout]
+  defaultRemote = upstream
+[init]
+  defaultBranch = main
+[core]
+  excludesfile = ~/.gitignore-global
+[includeIf "gitdir:~/Projects/"]
+  path = ~/.gitconfig-work
+[includeIf "gitdir:~/Workspace/"]
+  path = ~/.gitconfig-personal
+[credential]
+  helper = store
+[pager]
+  diff = delta
+  log = delta
+  reflog = delta
+  show = delta
+[delta]
+  side-by-side = true
