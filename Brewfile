@@ -5,6 +5,7 @@ tap "homebrew/services"
 cask_args appdir: '/Applications'
 
 brew "git"
+brew "gh"
 brew "wget"
 brew "telnet"
 brew "jq"
@@ -30,6 +31,7 @@ brew "pipenv"
 brew "kubectl"
 brew "kubectx"
 brew "krew"
+brew "helm"
 
 brew "awscli"
 
@@ -43,3 +45,4 @@ cask "google-chrome"
 cask "firefox"
 cask "docker"
 cask "keybase"
+cask "choosy"
