@@ -1,3 +1,8 @@
 [user]
   name = Geunwoo Shin
-  email = geunwoo@krafton.com
+  email = cypher@krafton.com
+  signingkey = 4026ED6149E58ADBC29298D8ECBF6821F02498EF
+[commit]
+  gpgsign = true
+[url "https://github.krafton.com/"]
+  insteadOf = git@github.krafton.com:

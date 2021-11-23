@@ -19,6 +19,8 @@ brew "git-delta"
 brew "neovim"
 brew "byobu"
 
+brew "gnupg"
+
 brew "zsh"
 
 brew "pyenv"
@@ -40,3 +42,4 @@ cask "jetbrains-toolbox"
 cask "google-chrome"
 cask "firefox"
 cask "docker"
+cask "keybase"
