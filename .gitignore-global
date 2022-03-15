@@ -1,4 +1,6 @@
 .byobu/.metadata_available
 .env
 .env.json
+.env.yaml
 .python-version
+.vscode

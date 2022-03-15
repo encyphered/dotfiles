@@ -4,9 +4,9 @@
   defaultBranch = main
 [core]
   excludesfile = ~/.gitignore-global
-[includeIf "gitdir:~/Projects/"]
+[includeIf "gitdir:~/projects/"]
   path = ~/.gitconfig-work
-[includeIf "gitdir:~/Workspace/"]
+[includeIf "gitdir:~/workspace/"]
   path = ~/.gitconfig-personal
 [credential]
   helper = store
@@ -17,3 +17,6 @@
   show = delta
 [delta]
   side-by-side = true
+[pull]
+  ff = only
+  rebase = true
