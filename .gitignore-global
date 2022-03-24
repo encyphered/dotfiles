@@ -4,3 +4,4 @@
 .env.yaml
 .python-version
 .vscode
+.go-version
