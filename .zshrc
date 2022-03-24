@@ -171,4 +171,16 @@ eval "$(goenv init -)"
 
 [ -d "${HOME}/.jenv" ] && export PATH="$HOME/.jenv/bin:$PATH" && eval "$(jenv init -)" || true
 
+randpwd() {
+  ruby -e 'i=(ARGV[0] or 20).to_i; j=(i/3.0).floor; k=(i/10.0).ceil; puts j.times.map{"QWERTASDFGZXCVB".split("").shuffle[0]}.join + (i-j-k-1).times.map{"yuiophjklnm".split("").shuffle[0]}.join + ((rand*(10**k)).floor).to_s + "[]{}#%^*+=_~.,?!".split("").shuffle.first' $1
+}
+
+alias tf='[ -z "$AWS_PROFILE" ] && { echo "No \$AWS_PROFILE set"; return 1 } || terraform'
 export GPG_TTY=$(tty)
+
+function kubecfg() {
+  local cfg
+  [ "$1" = "clear" ] && unset KUBECONFIG && return 0
+  cfg=$(/bin/ls $HOME/.kube/config-*|sed -e "s|^$HOME/.kube/config-||g"|fzf)
+  [ ! -z "$cfg" ] && export KUBECONFIG=$HOME/.kube/config-$cfg
+}
