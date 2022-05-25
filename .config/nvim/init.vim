@@ -12,6 +12,9 @@ Plug '/usr/local/opt/fzf'
 Plug 'junegunn/fzf.vim'
 Plug 'APZelos/blamer.nvim'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'wfxr/minimap.vim'
+Plug 'mhinz/vim-startify'
+Plug 'diepm/vim-rest-console'
 call plug#end()
 
 let g:python_host_prog = '/usr/local/bin/python'
@@ -71,7 +74,7 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 
-map <C-e> :NERDTreeToggle<CR>
+nnoremap <leader>e :NERDTreeToggle<CR>
 
 " vim-gitgutter
 set updatetime=100
@@ -111,3 +114,16 @@ augroup TerminalStuff
 augroup END
 let g:terminal_color_8='#3e5358'
 tnoremap <leader><ESC> <C-\><C-n>
+
+" minimap
+let g:minimap_auto_start = 1
+
+" mouse
+set mouse=nv
+
+" vim-rest-console
+let g:vrc_show_command = 1
+let g:vrc_curl_opts = {
+  \ '-s': '',
+  \ '-i': '',
+\}
