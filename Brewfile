@@ -18,6 +18,7 @@ brew "exa"
 brew "bat"
 brew "git-delta"
 brew "neovim"
+brew "code-minimap"
 brew "byobu"
 
 brew "gnupg"
