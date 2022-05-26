@@ -4,6 +4,7 @@ tap "homebrew/services"
 
 cask_args appdir: '/Applications'
 
+brew "watch"
 brew "git"
 brew "gh"
 brew "wget"
@@ -16,6 +17,7 @@ brew "fasd"
 
 brew "exa"
 brew "bat"
+brew "dog"
 brew "git-delta"
 brew "neovim"
 brew "code-minimap"
@@ -31,12 +33,16 @@ brew "pipenv"
 
 brew "kubectl"
 brew "kubectx"
+brew "kubefwd"
 brew "krew"
 brew "helm"
 
 brew "awscli"
+brew "eksctl"
 
 brew "redis"
+
+brew "jenv"
 
 cask "bartender"
 cask "alfred"
