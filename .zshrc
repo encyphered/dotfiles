@@ -61,6 +61,9 @@ source ~/.zsh/zsh-autosuggestions/zsh-autosuggestions.zsh
 source ~/.zsh/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
 source ~/.zsh/zsh-history-substring-search/zsh-history-substring-search.zsh
 
+AUTOENV_FILE_ENTER=.env
+source ~/.zsh/zsh-autoenv/autoenv.zsh
+
 if [ -x "$(which kubectl)" ]; then
   declare -f compdef > /dev/null && source <(kubectl completion zsh)
 
