@@ -41,6 +41,7 @@ elif [ ! -z "$P10K" ]; then
     source $OMZ/plugins/kubectl/kubectl.plugin.zsh
     source $OMZ/plugins/common-aliases/common-aliases.plugin.zsh
     source $OMZ/plugins/gradle/gradle.plugin.zsh
+    source $OMZ/plugins/aws/aws.plugin.zsh
   fi
 
   setopt interactivecomments
