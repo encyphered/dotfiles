@@ -166,7 +166,7 @@ function nvminit() {
 [ -f $HOME/Library/Preferences/org.dystroy.broot/launcher/bash/br ] && source $HOME/Library/Preferences/org.dystroy.broot/launcher/bash/br
 
 awsctx() {
-  export AWS_PROFILE=$(cat ~/.aws/config|grep '^\[profile'|awk '{print $2}'|sed -e 's/]//g'|fzf)
+  [ -z "$1" ] && export AWS_PROFILE=$(cat ~/.aws/config|grep '^\[profile'|awk '{print $2}'|sed -e 's/]//g'|fzf) || export AWS_PROFILE=$1
 }
 
 export GOENV_ROOT="$HOME/.goenv"
