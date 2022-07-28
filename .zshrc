@@ -93,6 +93,7 @@ if [ -x "$(which kubectl)" ]; then
   fi
   alias kgp='kubectl get pod'
   alias kgpw='kubectl get pod --watch'
+  alias klfc='kubectl logs -f -c'
   function kzaf() {
     /bin/ls | fzf | xargs kubectl apply -f
   }
@@ -193,8 +194,10 @@ alias tf='[ -z "$AWS_PROFILE" ] && { echo "No \$AWS_PROFILE set"; return 1 } || 
 export GPG_TTY=$(tty)
 
 function kubecfg() {
-  local cfg
+  local ctx
   [ "$1" = "clear" ] && unset KUBECONFIG && return 0
-  cfg=$(/bin/ls $HOME/.kube/config-*|sed -e "s|^$HOME/.kube/config-||g"|fzf)
-  [ ! -z "$cfg" ] && export KUBECONFIG=$HOME/.kube/config-$cfg
+  ctx=$(kubectl config view -o json|jq '.contexts[] | .name' -r|fzf) && \
+    kubectl config view --minify --flatten --context $ctx > "${HOME}/.kube/config-${ctx}" && \
+    chmod 600 "${HOME}/.kube/config-${ctx}" && \
+    export KUBECONFIG="${HOME}/.kube/config-${ctx}"
 }
