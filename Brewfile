@@ -4,11 +4,13 @@ tap "homebrew/services"
 
 cask_args appdir: '/Applications'
 
+brew "groff"
 brew "watch"
 brew "git"
 brew "gh"
 brew "wget"
 brew "telnet"
+brew "gawk"
 brew "jq"
 brew "fx"
 brew "yq"
@@ -44,6 +46,7 @@ brew "redis"
 
 brew "jenv"
 
+cask "1password-cli"
 cask "bartender"
 cask "alfred"
 cask "visual-studio-code"
@@ -53,3 +56,5 @@ cask "firefox"
 cask "docker"
 cask "keybase"
 cask "choosy"
+cask "rectangle"
+cask "wireshark"
