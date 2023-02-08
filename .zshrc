@@ -150,6 +150,8 @@ unalias grep 2> /dev/null
 
 [ -x "$(which exa)" ] && alias ls='exa --icons'
 [ -x "$(which bat)" ] && alias cat='bat --paging=never --style=plain'
+[ -x "$(which gsed)" ] && alias sed=gsed
+[ -x "$(which gawk)" ] && alias awk=gawk
 
 if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
 if which pyenv > /dev/null; then
