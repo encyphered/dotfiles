@@ -15,6 +15,7 @@ Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'wfxr/minimap.vim'
 Plug 'mhinz/vim-startify'
 Plug 'diepm/vim-rest-console'
+Plug 'github/copilot.vim'
 call plug#end()
 
 let g:python_host_prog = '/usr/local/bin/python'
