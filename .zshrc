@@ -209,3 +209,5 @@ function kubecfg() {
     chmod 600 "${HOME}/.kube/config-${ctx}" && \
     export KUBECONFIG="${HOME}/.kube/config-${ctx}"
 }
+
+export FX_THEME=2
