@@ -176,6 +176,7 @@ function nvminit() {
 awsctx() {
   [ -z "$1" ] && export AWS_PROFILE=$(cat ~/.aws/config|grep '^\[profile'|awk '{print $2}'|sed -e 's/]//g'|fzf) || export AWS_PROFILE=$1
 }
+[ -x "$(which aws_completer)" ] && complete -C $(which aws_completer) aws
 
 export GOENV_ROOT="$HOME/.goenv"
 export PATH="$GOENV_ROOT/bin:$PATH"
