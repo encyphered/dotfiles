@@ -66,11 +66,14 @@ AUTOENV_FILE_ENTER=.env
 source ~/.zsh/zsh-autoenv/autoenv.zsh
 
 export HOMEBREW_PREFIX="/opt/homebrew";
-export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
-export HOMEBREW_REPOSITORY="/opt/homebrew";
-export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
-export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
-export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
+if [ -d "$HOMEBREW_PREFIX" ]; then
+  export HOMEBREW_CELLAR="/opt/homebrew/Cellar";
+  export HOMEBREW_REPOSITORY="/opt/homebrew";
+  export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
+  export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
+  export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
+  export PATH="/opt/homebrew/opt/node@16/bin:$PATH"
+fi
 
 if [ -x "$(which kubectl)" ]; then
   declare -f compdef > /dev/null && source <(kubectl completion zsh)
