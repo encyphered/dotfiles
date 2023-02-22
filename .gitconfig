@@ -6,7 +6,11 @@
   excludesfile = ~/.gitignore-global
 [includeIf "gitdir:~/projects/"]
   path = ~/.gitconfig-work
+[includeIf "gitdir:~/Projects/"]
+  path = ~/.gitconfig-work
 [includeIf "gitdir:~/workspace/"]
+  path = ~/.gitconfig-personal
+[includeIf "gitdir:~/Workspace/"]
   path = ~/.gitconfig-personal
 [credential]
   helper = store
