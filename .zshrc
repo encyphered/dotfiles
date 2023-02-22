@@ -176,7 +176,7 @@ function nvminit() {
 
 [ -f $HOME/.secure-env.sh ] && source $HOME/.secure-env.sh 2> /dev/null
 
-[ -f $HOME/Library/Preferences/org.dystroy.broot/launcher/bash/br ] && source $HOME/Library/Preferences/org.dystroy.broot/launcher/bash/br
+[ -f $HOME/.config/broot/launcher/bash/br ] && source $HOME/.config/broot/launcher/bash/br
 
 awsctx() {
   [ -z "$1" ] && export AWS_PROFILE=$(cat ~/.aws/config|grep '^\[profile'|awk '{print $2}'|sed -e 's/]//g'|fzf) || export AWS_PROFILE=$1
