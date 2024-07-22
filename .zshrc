@@ -175,11 +175,25 @@ function nvminit() {
 }
 
 [ -f $HOME/.secure-env.sh ] && source $HOME/.secure-env.sh 2> /dev/null
+[ -f $HOME/.personal-env.sh ] && source $HOME/.personal-env.sh 2> /dev/null
 
 [ -f $HOME/.config/broot/launcher/bash/br ] && source $HOME/.config/broot/launcher/bash/br
 
 awsctx() {
-  [ -z "$1" ] && export AWS_PROFILE=$(cat ~/.aws/config|grep '^\[profile'|awk '{print $2}'|sed -e 's/]//g'|fzf) || export AWS_PROFILE=$1
+  if [ "$1" = "-" ]; then
+    unset AWS_PROFILE && return 0
+  fi
+
+  if [ -z "$1" ]; then
+    _AWS_PROFILE=$(cat ~/.aws/config|grep '^\[profile'|awk '{print $2}'|sed -e 's/]//g'|fzf)
+  else
+    _AWS_PROFILE=$1
+  fi
+
+  cat ~/.aws/config|grep '^\[profile'|awk '{print $2}'|sed -e 's/]//g'|grep -q "^${_AWS_PROFILE}$" || return 1
+
+  export AWS_PROFILE=$_AWS_PROFILE
+  sed -i'' -e '/^export AWS_PROFILE/d' ~/.personal-env.sh && echo "export AWS_PROFILE=${1}" >> ~/.personal-env.sh
 }
 [ -x "$(which aws_completer)" ] && complete -C $(which aws_completer) aws
 
