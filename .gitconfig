@@ -12,6 +12,10 @@
   path = ~/.gitconfig-personal
 [includeIf "gitdir:~/Workspace/"]
   path = ~/.gitconfig-personal
+[includeIf "gitdir:~/Developer/"]
+  path = ~/.gitconfig-personal
+[includeIf "gitdir:~/developer/"]
+  path = ~/.gitconfig-personal
 [credential]
   helper = store
 [pager]
