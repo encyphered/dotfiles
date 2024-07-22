@@ -5,3 +5,7 @@
 .python-version
 .vscode
 .go-version
+.idea
+.idea/compiler.xml
+.tool-versions
+*.bak
