@@ -203,7 +203,7 @@ randpwd() {
   puts' $1 $2
 }
 
-alias tf='[ -z "$AWS_PROFILE" ] && { echo "No \$AWS_PROFILE set"; return 1 } || terraform'
+alias tf='AWS_PROFILE=terraform terraform'
 export GPG_TTY=$(tty)
 
 function kubecfg() {
@@ -216,3 +216,7 @@ function kubecfg() {
 }
 
 export FX_THEME=2
+
+alias tmls='tmux ls'
+alias tmc='tmux -CC'
+alias tma='tmux -CC attach -t'
