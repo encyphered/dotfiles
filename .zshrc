@@ -54,7 +54,6 @@ bindkey "^[^[[C" forward-word
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
-[ -d "${HOME}/bin" ] && export PATH="$HOME/bin:$PATH"
 export PATH="${KREW_ROOT:-$HOME/.krew}/bin:$PATH"
 
 [ -d $HOME/.zsh/zsh-completions/src ] && fpath=($HOME/.zsh/zsh-completions/src $fpath)
@@ -88,7 +87,7 @@ if [ -x "$(which kubectl)" ]; then
     kubeon -g
   }
 
-  if [ -x "$(which kubectl-fzf)" ]; then
+  if [ -x "$HOME/bin/kubectl-fzf" ]; then
     alias kz='kubectl fzf'
     alias kzl='kz logs'
     alias kzlc='kz logs -c'
@@ -104,6 +103,7 @@ if [ -x "$(which kubectl)" ]; then
   alias kgp='kubectl get pod'
   alias kgpw='kubectl get pod --watch'
   alias klfc='kubectl logs -f -c'
+  alias kd='kubectl describe'
   function kzaf() {
     /bin/ls | fzf | xargs kubectl apply -f
   }
@@ -151,7 +151,7 @@ alias jqr='jq -r'
 
 unalias grep 2> /dev/null
 
-[ -x "$(which exa)" ] && alias ls='exa --icons'
+[ -x "$(which eza)" ] && alias ls='eza --icons' && export EZA_CONFIG_DIR="${HOME}/.config/eza"
 [ -x "$(which bat)" ] && alias cat='bat --paging=never --style=plain'
 [ -x "$(which gsed)" ] && alias sed=gsed
 [ -x "$(which gawk)" ] && alias awk=gawk
@@ -234,3 +234,7 @@ export FX_THEME=2
 alias tmls='tmux ls'
 alias tmc='tmux -CC'
 alias tma='tmux -CC attach -t'
+
+set -o vi
+
+[ -d "${HOME}/bin" ] && export PATH="$HOME/bin:$PATH"
