@@ -254,7 +254,7 @@ eval "$(goenv init -)"
 
 [ -d "${HOME}/.jenv" ] && export PATH="$HOME/.jenv/bin:$PATH" && eval "$(jenv init -)" || true
 
-alias tf='AWS_PROFILE=terraform terraform'
+alias tf=terraform
 export GPG_TTY=$(tty)
 
 function kubecfg() {
