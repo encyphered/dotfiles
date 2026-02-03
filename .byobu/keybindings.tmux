@@ -3,6 +3,14 @@ set -g prefix ^A
 set -g prefix2 F12
 bind a send-prefix
 
-# Unbind list-windows
-unbind ^w
+bind-key S split-window -v
+bind-key | split-window -h
+
+unbind k
+bind h select-pane -L
+bind j select-pane -D
+bind k select-pane -U
+bind l select-pane -R
+
 unbind w
+
