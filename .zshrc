@@ -164,7 +164,38 @@ if which pyenv > /dev/null; then
 fi
 
 export BYOBU_PYTHON=python3
-alias screen='byobu'
+function screen() {
+  if [[ $ -eq 0 ]]; then
+    byobu new-session
+    return $?
+  fi
+
+  if [[ "$1" == "-ls" ]]; then
+    byobu list-sessions
+    return $?
+  fi
+
+  if [[ "$1" == "-dr" && -z "$2" ]]; then
+    local sessions
+    sessions=($(byobu list-sessions -F '#{session_name}'))
+    if [[ ${#sessions[@]} -eq 1 ]]; then
+      byobu attach-session -d -t "${sessions[1]}"
+      return $?
+    else
+      echo "There are several screens on:" >&2
+      byobu list-sessions >&2
+      return 1
+    fi
+  fi
+
+  if [[ "$1" == "-dr" && -n "$2" ]]; then
+    byobu attach-session -d -t "$2"
+    return $?
+  fi
+
+  echo "Invalid parameter"
+  return 1
+}
 
 export LANG=en_US.UTF-8
 
