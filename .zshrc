@@ -254,20 +254,6 @@ eval "$(goenv init -)"
 
 [ -d "${HOME}/.jenv" ] && export PATH="$HOME/.jenv/bin:$PATH" && eval "$(jenv init -)" || true
 
-randpwd() {
-  ruby -e 'i = (ARGV[0] or 20).to_i
-  j = (i/3.0).floor
-  k = (i/10.0).ceil
-  l = (ARGV[1] or 0).to_i
-  m = i - (j + k + l)
-
-  print j.times.map{("A".."Z").to_a.shuffle[0]}.join
-  print m.times.map{("a".."z").to_a.shuffle[0]}.join
-  print "%02d" % ((rand*(10**k)).floor)
-  print "[]{}#%^*+=_~.,?!".split("").shuffle[0..l-1].join if l > 0
-  puts' $1 $2
-}
-
 alias tf='AWS_PROFILE=terraform terraform'
 export GPG_TTY=$(tty)
 
