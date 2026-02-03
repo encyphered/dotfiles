@@ -21,7 +21,7 @@ brew "neovim"
 brew "mosh"
 brew "archey4"
 
-brew "exa"
+brew "eza"
 brew "bat"
 brew "dog"
 brew "git-delta"
@@ -46,6 +46,7 @@ brew "kubectl"
 brew "kubectx"
 brew "krew"
 brew "helm"
+brew "k9s"
 brew "operator-sdk"
 tap "azure/kubelogin"
 
@@ -56,6 +57,8 @@ brew "redis"
 
 brew "jenv"
 brew "openjdk@8"
+
+brew "nvm"
 
 cask "1password-cli"
 cask "bartender"
