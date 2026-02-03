@@ -9,3 +9,7 @@
 .idea/compiler.xml
 .tool-versions
 *.bak
+.DS_Store
+node_modules
+.nvmrc
+.claude/
