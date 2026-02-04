@@ -71,7 +71,6 @@ if [ -d "$HOMEBREW_PREFIX" ]; then
   export PATH="/opt/homebrew/bin:/opt/homebrew/sbin${PATH+:$PATH}";
   export MANPATH="/opt/homebrew/share/man${MANPATH+:$MANPATH}:";
   export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
-  export PATH="/opt/homebrew/opt/node@16/bin:$PATH"
 fi
 
 if [ -x "$(which kubectl)" ]; then
@@ -199,30 +198,30 @@ function screen() {
 
 export LANG=en_US.UTF-8
 
-export NVM_DIR="$HOME/.nvm"
+lazynvm() {
+  unset -f nvm node npm
+  export NVM_DIR="$HOME/.nvm"
+  [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+}
 
-function nvminit() {
-  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
-  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
-  autoload -U add-zsh-hook
-  load-nvmrc() {
-    local node_version="$(nvm version)"
-    local nvmrc_path="$(nvm_find_nvmrc)"
+nvm() {
+  lazynvm
+  nvm $@
+}
 
-    if [ -n "$nvmrc_path" ]; then
-      local nvmrc_node_version=$(nvm version "$(cat "${nvmrc_path}")")
+node() {
+  lazynvm
+  node $@
+}
 
-      if [ "$nvmrc_node_version" = "N/A" ]; then
-        nvm install
-      elif [ "$nvmrc_node_version" != "$node_version" ]; then
-        nvm use
-      fi
-    elif [ "$node_version" != "$(nvm version default)" ]; then
-      echo "Reverting to nvm default version"
-      nvm use default
-    fi
-  }
-  add-zsh-hook chpwd load-nvmrc load-nvmrc
+npm() {
+  lazynvm
+  npm $@
+}
+
+npx() {
+  lazynvm
+  npx $@
 }
 
 [ -f $HOME/.secure-env.sh ] && source $HOME/.secure-env.sh 2> /dev/null
