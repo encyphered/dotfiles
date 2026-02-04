@@ -268,10 +268,6 @@ function kubecfg() {
 
 export FX_THEME=2
 
-alias tmls='tmux ls'
-alias tmc='tmux -CC'
-alias tma='tmux -CC attach -t'
-
 set -o vi
 
 [ -d "${HOME}/bin" ] && export PATH="$HOME/bin:$PATH"
