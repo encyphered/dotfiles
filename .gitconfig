@@ -6,20 +6,14 @@
   defaultBranch = main
 [core]
   excludesfile = ~/.gitignore-global
-[includeIf "gitdir:~/projects/"]
+[includeIf "gitdir:~/Projects/Work"]
   path = ~/.gitconfig-work
-[includeIf "gitdir:~/Projects/"]
-  path = ~/.gitconfig-work
-[includeIf "gitdir:~/workspace/"]
-  path = ~/.gitconfig-personal
-[includeIf "gitdir:~/Workspace/"]
+[includeIf "gitdir:~/Projects/Personal"]
   path = ~/.gitconfig-personal
 [includeIf "gitdir:~/Developer/"]
   path = ~/.gitconfig-personal
-[includeIf "gitdir:~/developer/"]
-  path = ~/.gitconfig-personal
 [credential]
-  helper = store
+  helper = osxkeychain
 [pager]
   diff = delta
   log = delta
