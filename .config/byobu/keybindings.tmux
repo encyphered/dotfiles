@@ -13,4 +13,3 @@ bind k select-pane -U
 bind l select-pane -R
 
 unbind w
-
