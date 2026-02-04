@@ -1,22 +1,6 @@
-#export ZSH=$HOME/.oh-my-zsh
 export P10K=$HOME/.p10k
 
-if [ ! -z "$ZSH" ]; then
-  ENABLE_CORRECTION="true"
-  DISABLE_UNTRACKED_FILES_DIRTY="true"
-  HIST_STAMPS="yyyy-mm-dd"
-  ZSH_THEME="robbyrussell"
-
-  plugins=(
-    git
-    kubectl
-    docker
-    fasd
-    kube-ps1
-  )
-
-  source $ZSH/oh-my-zsh.sh
-elif [ ! -z "$P10K" ]; then
+if [ ! -z "$P10K" ]; then
   source $P10K/powerlevel10k.zsh-theme
   if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
