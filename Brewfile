@@ -61,6 +61,7 @@ brew "openjdk@8"
 brew "nvm"
 
 brew "lefthook"
+tap "matheusml/zsh-ai"
 
 cask "1password-cli"
 cask "bartender"
