@@ -148,7 +148,7 @@ fi
 
 export BYOBU_PYTHON=python3
 function screen() {
-  if [[ $ -eq 0 ]]; then
+  if [[ $? -eq 0 ]]; then
     byobu new-session
     return $?
   fi
