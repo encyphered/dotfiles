@@ -6,9 +6,13 @@
   defaultBranch = main
 [core]
   excludesfile = ~/.gitignore-global
-[includeIf "gitdir:~/Projects/Work"]
+[user]
+  name = Geunwoo Shin
+  email = encyphered@gmail.com
+  signingkey = 4026ED6149E58ADBC29298D8ECBF6821F02498EF
+[includeIf "gitdir:~/Projects/Work/"]
   path = ~/.gitconfig-work
-[includeIf "gitdir:~/Projects/Personal"]
+[includeIf "gitdir:~/Projects/Personal/"]
   path = ~/.gitconfig-personal
 [includeIf "gitdir:~/Developer/"]
   path = ~/.gitconfig-personal
