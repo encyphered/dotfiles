@@ -5,6 +5,7 @@ bind a send-prefix
 
 bind-key S split-window -v
 bind-key | split-window -h
+bind-key C send-keys C-l
 
 unbind k
 bind h select-pane -L
