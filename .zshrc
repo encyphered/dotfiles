@@ -254,3 +254,6 @@ export FX_THEME=2
 set -o vi
 
 [ -d "${HOME}/bin" ] && export PATH="$HOME/bin:$PATH"
+
+export ZSH_AI_PROVIDER="openai"
+source $(brew --prefix)/share/zsh-ai/zsh-ai.plugin.zsh
