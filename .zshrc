@@ -119,7 +119,7 @@ alias gs='git log --pretty="%h %cr, %an: %s" --max-count=20 | fzf --no-sort | cu
 unalias ga
 function ga() {
   if [ $# -eq 0 ] || [ "$1" = "-p" ]; then
-    git status -s | grep -v "^[DMA] " | fzf -m | awk "{print \$2}" | xargs -o git add $@
+    git status -s | grep -v "^[DMAR] " | fzf -m | awk "{print \$2}" | xargs -o git add $@
   else
     git add $@
   fi
@@ -183,7 +183,7 @@ function screen() {
 export LANG=en_US.UTF-8
 
 lazynvm() {
-  unset -f nvm node npm
+  unset -f nvm node npm npx 2> /dev/null
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
 }
