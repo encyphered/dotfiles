@@ -60,6 +60,8 @@ brew "openjdk@8"
 
 brew "nvm"
 
+brew "lefthook"
+
 cask "1password-cli"
 cask "bartender"
 cask "alfred"
@@ -78,3 +80,4 @@ cask "keepingyouawake"
 cask "stats"
 cask "github"
 cask "androidtool"
+cask "gcloud-cli"
