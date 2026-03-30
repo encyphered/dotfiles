@@ -253,6 +253,7 @@ export FX_THEME=2
 
 set -o vi
 
+[ -d "${HOME}/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
 [ -d "${HOME}/bin" ] && export PATH="$HOME/bin:$PATH"
 
 export ZSH_AI_PROVIDER="openai"
