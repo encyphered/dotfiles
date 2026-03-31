@@ -1,7 +1,3 @@
-tap "homebrew/bundle"
-tap "homebrew/cask"
-tap "homebrew/services"
-
 cask_args appdir: '/Applications'
 
 brew "groff"
@@ -12,30 +8,19 @@ brew "wget"
 brew "telnet"
 brew "gawk"
 brew "gnu-sed"
-brew "jq"
 brew "fx"
 brew "yq"
 brew "fzf"
-brew "fasd"
 brew "neovim"
-brew "mosh"
-brew "archey4"
 
 brew "eza"
 brew "bat"
-brew "dog"
 brew "git-delta"
-brew "neovim"
-brew "code-minimap"
 brew "byobu"
 brew "broot"
 
 brew "gnupg"
-
-brew "zsh"
-brew "curl"
-
-brew "asdf"
+brew "tree-sitter-cli"
 
 brew "goenv"
 brew "pyenv"
@@ -51,12 +36,6 @@ brew "operator-sdk"
 tap "azure/kubelogin"
 
 brew "awscli"
-brew "eksctl"
-
-brew "redis"
-
-brew "jenv"
-brew "openjdk@8"
 
 brew "nvm"
 
@@ -64,21 +43,6 @@ brew "lefthook"
 tap "matheusml/zsh-ai"
 
 cask "1password-cli"
-cask "bartender"
-cask "alfred"
-cask "visual-studio-code"
-cask "jetbrains-toolbox"
-cask "google-chrome"
-cask "microsoft-edge"
-cask "firefox"
-cask "docker"
+cask "docker-desktop"
 cask "keybase"
-cask "choosy"
-cask "rectangle"
-cask "wireshark"
-cask "mimestream"
-cask "keepingyouawake"
-cask "stats"
-cask "github"
-cask "androidtool"
 cask "gcloud-cli"
