@@ -57,42 +57,6 @@ if [ -d "$HOMEBREW_PREFIX" ]; then
   export INFOPATH="/opt/homebrew/share/info:${INFOPATH:-}";
 fi
 
-if [ -x "$(which kubectl)" ]; then
-  declare -f compdef > /dev/null && source <(kubectl completion zsh)
-
-  declare -f kubeon > /dev/null && {
-    KUBE_PS1_SYMBOL_ENABLE=false
-    KUBE_PS1_PREFIX='['
-    KUBE_PS1_SUFFIX='] '
-    KUBE_PS1_NS_ENABLE=true
-    KUBE_PS1_SEPERATOR=""
-    PROMPT='$(kube_ps1)'$PROMPT
-    kubeon -g
-  }
-
-  if [ -x "$HOME/bin/kubectl-fzf" ]; then
-    alias kz='kubectl fzf'
-    alias kzl='kz logs'
-    alias kzlc='kz logs -c'
-    alias kzlf='kz logs -f'
-    alias kzlfc='kz logs -fc'
-    alias kzgp='kz get pod'
-    alias kzgpc="kubectl get pod --no-headers|fzf|awk '{print \$1}'|xargs echo -n |pbcopy"
-
-    alias keti='kz exec -it'
-    alias ketic='kz exec -itc'
-    alias ke='kz exec'
-  fi
-  alias kgp='kubectl get pod'
-  alias kgpw='kubectl get pod --watch'
-  alias klfc='kubectl logs -f -c'
-  alias kd='kubectl describe'
-  function kzaf() {
-    /bin/ls | fzf | xargs kubectl apply -f
-  }
-
-fi
-
 export LSCOLORS=exfxcxdxbxegedabagacad
 
 alias ls='ls -G'
@@ -256,5 +220,38 @@ set -o vi
 [ -d "${HOME}/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
 [ -d "${HOME}/bin" ] && export PATH="$HOME/bin:$PATH"
 
-export ZSH_AI_PROVIDER="openai"
-source $(brew --prefix)/share/zsh-ai/zsh-ai.plugin.zsh
+if [ -x "$(which kubectl)" ]; then
+  declare -f compdef > /dev/null && source <(kubectl completion zsh)
+
+  declare -f kubeon > /dev/null && {
+    KUBE_PS1_SYMBOL_ENABLE=false
+    KUBE_PS1_PREFIX='['
+    KUBE_PS1_SUFFIX='] '
+    KUBE_PS1_NS_ENABLE=true
+    KUBE_PS1_SEPERATOR=""
+    PROMPT='$(kube_ps1)'$PROMPT
+    kubeon -g
+  }
+
+  if [ -x "$(which kubectl-fzf)" ]; then
+    alias kz='kubectl fzf'
+    alias kzl='kz logs'
+    alias kzlc='kz logs -c'
+    alias kzlf='kz logs -f'
+    alias kzlfc='kz logs -fc'
+    alias kzgp='kz get pod'
+    alias kzgpc="kubectl get pod --no-headers|fzf|awk '{print \$1}'|xargs echo -n |pbcopy"
+
+    alias keti='kz exec -it'
+    alias ketic='kz exec -itc'
+    alias ke='kz exec'
+  fi
+  alias kgp='kubectl get pod'
+  alias kgpw='kubectl get pod --watch'
+  alias klfc='kubectl logs -f -c'
+  alias kd='kubectl describe'
+  function kzaf() {
+    /bin/ls | fzf | xargs kubectl apply -f
+  }
+
+fi
