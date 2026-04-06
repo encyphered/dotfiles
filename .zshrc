@@ -255,3 +255,6 @@ if [ -x "$(which kubectl)" ]; then
   }
 
 fi
+
+export ZSH_AI_PROVIDER="openai"
+[ -f "${HOME}/.zsh/zsh-ai/zsh-ai.plugin.zsh" ] && source "${HOME}/.zsh/zsh-ai/zsh-ai.plugin.zsh"
