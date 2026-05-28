@@ -1,13 +1,21 @@
 export P10K=$HOME/.p10k
 
 if [ ! -z "$P10K" ]; then
+  typeset -gix P9K_SSH=0
+  typeset -gx _P9K_SSH_TTY=$TTY
+
   source $P10K/powerlevel10k.zsh-theme
   if [[ -r "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh" ]]; then
     source "${XDG_CACHE_HOME:-$HOME/.cache}/p10k-instant-prompt-${(%):-%n}.zsh"
   fi
   [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
-  autoload -U compinit && compinit
+autoload -U compinit
+if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qNmh-24) ]]; then
+  compinit -C
+else
+  compinit
+fi
 
   OMZ="$HOME/.oh-my-zsh"
   if [ -d "$OMZ" ]; then
@@ -149,31 +157,37 @@ function screen() {
 
 export LANG=en_US.UTF-8
 
-lazynvm() {
-  unset -f nvm node npm npx 2> /dev/null
+
+if [[ -o interactive ]]; then
+  lazynvm() {
+    unset -f nvm node npm npx 2> /dev/null
+    export NVM_DIR="$HOME/.nvm"
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+  }
+
+  nvm() {
+    lazynvm
+    nvm $@
+  }
+
+  node() {
+    lazynvm
+    node $@
+  }
+
+  npm() {
+    lazynvm
+    npm $@
+  }
+
+  npx() {
+    lazynvm
+    npx $@
+  }
+else
   export NVM_DIR="$HOME/.nvm"
   [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-}
-
-nvm() {
-  lazynvm
-  nvm $@
-}
-
-node() {
-  lazynvm
-  node $@
-}
-
-npm() {
-  lazynvm
-  npm $@
-}
-
-npx() {
-  lazynvm
-  npx $@
-}
+fi
 
 [ -f $HOME/.secure-env.sh ] && source $HOME/.secure-env.sh 2> /dev/null
 [ -f $HOME/.personal-env.sh ] && source $HOME/.personal-env.sh 2> /dev/null
@@ -198,9 +212,28 @@ awsctx() {
 }
 [ -x "$(which aws_completer)" ] && complete -C $(which aws_completer) aws
 
-export GOENV_ROOT="$HOME/.goenv"
-export PATH="$GOENV_ROOT/bin:$PATH"
-eval "$(goenv init -)"
+if [[ -o interactive ]]; then
+  lazygoenv() {
+    unset -f go goenv 2> /dev/null
+    export GOENV_ROOT="$HOME/.goenv"
+    export PATH="$GOENV_ROOT/bin:$PATH"
+    eval "$(goenv init -)"
+  }
+
+  go() {
+    lazygoenv
+    go "$@"
+  }
+
+  goenv() {
+    lazygoenv
+    goenv "$@"
+  }
+else
+  export GOENV_ROOT="$HOME/.goenv"
+  export PATH="$GOENV_ROOT/bin:$PATH"
+  eval "$(goenv init -)"
+fi
 
 [ -d "${HOME}/.jenv" ] && export PATH="$HOME/.jenv/bin:$PATH" && eval "$(jenv init -)" || true
 
