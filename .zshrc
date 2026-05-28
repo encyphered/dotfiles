@@ -261,3 +261,10 @@ fi
 
 export ZSH_AI_PROVIDER="openai"
 [ -f "${HOME}/.zsh/zsh-ai/zsh-ai.plugin.zsh" ] && source "${HOME}/.zsh/zsh-ai/zsh-ai.plugin.zsh"
+
+clear-scrollback() {
+  printf '\033[2J\033[3J\033[H'
+  zle reset-prompt
+}
+zle -N clear-scrollback
+bindkey '^K' clear-scrollback
