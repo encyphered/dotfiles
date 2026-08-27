@@ -139,11 +139,83 @@ vim.o.timeoutlen = 300
 vim.o.splitright = true
 vim.o.splitbelow = true
 
--- Enable autoread and set up checking triggers
+-- Enable autoread and reload files that changed outside of nvim.
+--
+-- `autoread` on its own does nothing until something runs :checktime, so it
+-- needs a trigger. Autocmds only get us halfway: FocusGained depends on the
+-- terminal (and tmux) reporting focus, and CursorHold fires just once per
+-- keypress (`:help CursorHold`), so both go quiet exactly when nvim is sitting
+-- in the background. So we let the kernel tell us instead, with one libuv
+-- watcher per buffer -- no polling, and nothing to configure in the terminal.
 vim.o.autoread = true
+
+local autoread_group = vim.api.nvim_create_augroup('cypher-autoread', { clear = true })
+
+-- Still check on the way back in, so a change lands the moment we look at it.
 vim.api.nvim_create_autocmd({ 'FocusGained', 'BufEnter' }, {
-  command = "if mode() != 'c' | checktime | endif",
+  group = autoread_group,
   pattern = '*',
+  command = "if mode() != 'c' | checktime | endif",
+})
+
+local watchers = {}
+
+local function unwatch(buf)
+  local watcher = watchers[buf]
+  if watcher then
+    watchers[buf] = nil
+    watcher:stop()
+    if not watcher:is_closing() then watcher:close() end
+  end
+end
+
+local watch -- declared up front because watch() re-arms itself
+
+watch = function(buf)
+  unwatch(buf)
+
+  if not vim.api.nvim_buf_is_valid(buf) or vim.bo[buf].buftype ~= '' then return end
+
+  local path = vim.api.nvim_buf_get_name(buf)
+  if path == '' or vim.fn.filereadable(path) == 0 then return end
+
+  local watcher = vim.uv.new_fs_event()
+  if not watcher then return end
+  watchers[buf] = watcher
+
+  local started = watcher:start(path, {}, function(err, _, events)
+    if err then return end
+    -- This callback runs on the libuv side, where the nvim API is off limits.
+    vim.schedule(function()
+      if not vim.api.nvim_buf_is_valid(buf) then return end
+      -- checktime can reload the buffer under us, so stay out of the command
+      -- line and the cmdline window.
+      if vim.fn.mode() ~= 'c' and vim.fn.getcmdwintype() == '' then vim.cmd('silent! checktime ' .. buf) end
+      -- A rename means the inode we were watching is gone, which is how most
+      -- tools save: write a temp file, then rename it over the target. This
+      -- watcher is now dead, so bind a fresh one to the path. The delay gives
+      -- the replacement file time to show up.
+      if not events.rename or not watchers[buf] then return end
+
+      vim.defer_fn(function()
+        if watchers[buf] then watch(buf) end
+      end, 50)
+    end)
+  end)
+
+  if started ~= 0 then unwatch(buf) end
+end
+
+-- BufWritePost re-arms after our own writes, which may also have replaced the
+-- inode; BufFilePost covers the buffer being pointed at a different file.
+vim.api.nvim_create_autocmd({ 'BufReadPost', 'BufWritePost', 'BufFilePost' }, {
+  group = autoread_group,
+  callback = function(event) watch(event.buf) end,
+})
+
+vim.api.nvim_create_autocmd({ 'BufDelete', 'BufWipeout' }, {
+  group = autoread_group,
+  callback = function(event) unwatch(event.buf) end,
 })
 
 -- Sets how neovim will display certain whitespace characters in the editor.
