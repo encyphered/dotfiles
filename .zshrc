@@ -119,10 +119,10 @@ alias jqr='jq -r'
 
 unalias grep 2> /dev/null
 
-[ -x "$(which eza)" ] && alias ls='eza --icons' && export EZA_CONFIG_DIR="${HOME}/.config/eza"
-[ -x "$(which bat)" ] && alias cat='bat --paging=never --style=plain'
-[ -x "$(which gsed)" ] && alias sed=gsed
-[ -x "$(which gawk)" ] && alias awk=gawk
+(( $+commands[eza] )) && alias ls='eza --icons' && export EZA_CONFIG_DIR="${HOME}/.config/eza"
+(( $+commands[bat] )) && alias cat='bat --paging=never --style=plain'
+(( $+commands[gsed] )) && alias sed=gsed
+(( $+commands[gawk] )) && alias awk=gawk
 
 if command -v pyenv > /dev/null; then
   _pyenv_cache="${HOME}/.cache/zsh/pyenv-init.zsh"
@@ -226,7 +226,7 @@ awsctx() {
   export AWS_PROFILE=$_AWS_PROFILE
   sed -i'' -e '/^export AWS_PROFILE/d' ~/.personal-env.sh && echo "export AWS_PROFILE=${1}" >> ~/.personal-env.sh
 }
-[ -x "$(which aws_completer)" ] && complete -C $(which aws_completer) aws
+(( $+commands[aws_completer] )) && complete -C $commands[aws_completer] aws
 
 if [[ -o interactive ]]; then
   lazygoenv() {
@@ -254,7 +254,7 @@ fi
 [ -d "${HOME}/.jenv" ] && export PATH="$HOME/.jenv/bin:$PATH" && eval "$(jenv init -)" || true
 
 alias tf=terraform
-export GPG_TTY=$(tty)
+export GPG_TTY=$TTY
 
 function kubecfg() {
   local ctx
@@ -272,7 +272,7 @@ set -o vi
 [ -d "${HOME}/.local/bin" ] && export PATH="$HOME/.local/bin:$PATH"
 [ -d "${HOME}/bin" ] && export PATH="$HOME/bin:$PATH"
 
-if [ -x "$(which kubectl)" ]; then
+if (( $+commands[kubectl] )); then
   # Completion is autoloaded by compinit from $ZSH_COMPCACHE/_kubectl above.
 
   declare -f kubeon > /dev/null && {
@@ -285,7 +285,7 @@ if [ -x "$(which kubectl)" ]; then
     kubeon -g
   }
 
-  if [ -x "$(which kubectl-fzf)" ]; then
+  if (( $+commands[kubectl-fzf] )); then
     alias kz='kubectl fzf'
     alias kzl='kz logs'
     alias kzlc='kz logs -c'
