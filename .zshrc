@@ -10,6 +10,17 @@ if [ ! -z "$P10K" ]; then
   fi
   [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
+# Completion cache for external tools. Must be added to fpath before compinit scans it.
+ZSH_COMPCACHE="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/completions"
+[[ -d $ZSH_COMPCACHE ]] || mkdir -p $ZSH_COMPCACHE
+# -e, not -s: the plugin's background job truncates the file before rewriting it,
+# and a transient 0-byte read must not trigger a full .zcompdump rebuild.
+if (( $+commands[kubectl] )) && [[ ! -e $ZSH_COMPCACHE/_kubectl || $commands[kubectl] -nt $ZSH_COMPCACHE/_kubectl ]]; then
+  kubectl completion zsh > $ZSH_COMPCACHE/_kubectl
+  rm -f ${ZDOTDIR:-$HOME}/.zcompdump  # invalidate the dump, or compinit -C would skip the new function
+fi
+fpath=($ZSH_COMPCACHE $fpath)
+
 autoload -U compinit
 if [[ -n ${ZDOTDIR:-$HOME}/.zcompdump(#qNmh-24) ]]; then
   compinit -C
@@ -20,7 +31,9 @@ fi
   OMZ="$HOME/.oh-my-zsh"
   if [ -d "$OMZ" ]; then
     if [[ -z "$ZSH_CACHE_DIR" ]]; then
-      export ZSH_CACHE_DIR="$OMZ/cache"
+      # Point $ZSH_CACHE_DIR/completions at ZSH_COMPCACHE above, so the kubectl
+      # plugin's background job keeps the fpath cache up to date on its own.
+      export ZSH_CACHE_DIR="${ZSH_COMPCACHE:h}"
     fi
   fi
   if [ -d "$OMZ/lib" ]; then
@@ -260,7 +273,7 @@ set -o vi
 [ -d "${HOME}/bin" ] && export PATH="$HOME/bin:$PATH"
 
 if [ -x "$(which kubectl)" ]; then
-  declare -f compdef > /dev/null && source <(kubectl completion zsh)
+  # Completion is autoloaded by compinit from $ZSH_COMPCACHE/_kubectl above.
 
   declare -f kubeon > /dev/null && {
     KUBE_PS1_SYMBOL_ENABLE=false
