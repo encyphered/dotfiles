@@ -1,2 +1,3 @@
 .byobu/.metadata_available
 .byobu/.ssh-agent
+.config/byobu/.ssh-agent

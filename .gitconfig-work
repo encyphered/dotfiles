@@ -1,4 +1,5 @@
 [user]
+  name = Geunwoo Shin
   email = cypher@krafton.com
 [commit]
   gpgsign = true

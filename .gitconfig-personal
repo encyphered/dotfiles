@@ -1,3 +1,5 @@
 [user]
   name = Geunwoo Shin
   email = encyphered@gmail.com
+[commit]
+  gpgsign = true
