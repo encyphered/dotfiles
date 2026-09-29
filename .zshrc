@@ -111,11 +111,14 @@ unalias grep 2> /dev/null
 [ -x "$(which gsed)" ] && alias sed=gsed
 [ -x "$(which gawk)" ] && alias awk=gawk
 
-if which rbenv > /dev/null; then eval "$(rbenv init -)"; fi
-if which pyenv > /dev/null; then
-  eval "$(pyenv init --path)" > /dev/null
-  eval "$(pyenv init -)" > /dev/null
-  if which pyenv-virtualenv-init > /dev/null; then eval "$(pyenv virtualenv-init -)"; fi
+if command -v pyenv > /dev/null; then
+  _pyenv_cache="${HOME}/.cache/zsh/pyenv-init.zsh"
+  if [[ ! -s $_pyenv_cache || $commands[pyenv] -nt $_pyenv_cache ]]; then
+    mkdir -p ${_pyenv_cache:h}
+    { pyenv init - --no-rehash zsh; pyenv virtualenv-init - zsh } > $_pyenv_cache
+  fi
+  source $_pyenv_cache
+  unset _pyenv_cache
 fi
 
 export BYOBU_PYTHON=python3
