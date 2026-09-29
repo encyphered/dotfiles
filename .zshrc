@@ -317,3 +317,6 @@ clear-scrollback() {
 }
 zle -N clear-scrollback
 bindkey '^K' clear-scrollback
+
+alias df=duf
+alias du="ncdu --color dark"
